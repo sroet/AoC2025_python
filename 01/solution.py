@@ -31,13 +31,16 @@ def part_2(data):
     current = 50
     out = 0
     for d, val in data:
+        prev = current
         if d == "L":
-            a = -1
-        else:
-            a = 1
-        for _ in range(val):
-            current += a
-            if current % 100 == 0:
+            val *= -1
+        current += val
+        div, current = divmod(current, 100)
+        out += abs(div)
+        if d == "L":
+            if prev == 0:
+                out -= 1
+            if current == 0:
                 out += 1
     return out
 
@@ -49,7 +52,7 @@ def main(fname):
     t1 = time.time()
     print(f"Part 1: {total_1}")
     print(f"Ran in {t1-start} s")
-    total_2 = part_2_slow(data)
+    total_2 = part_2(data)
     print(f"Part 2: {total_2}")
     print(f"Ran in {time.time()-t1} s")
     print(f"Total ran in {time.time()-start} s")
