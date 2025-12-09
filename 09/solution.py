@@ -23,7 +23,36 @@ def part_1(data):
     )
 
 
+def minmax(a, b):
+    return min(a, b), max(a, b)
+
+
+def sort(l):
+    out = []
+    for (a, b), (c, d) in l:
+        a, c = minmax(a, c)
+        b, d = minmax(b, d)
+        out.append(((a, b), (c, d)))
+    return out
+
+
 def part_2(data):
+    perimeter = list(pairwise(data + [data[0]]))
+    green = sort(perimeter)
+    areas = [
+        (((jx - ix) + 1) * ((jy - iy) + 1), ((ix, iy), (jx, jy)))
+        for (ix, iy), (jx, jy) in sort(combinations(data, 2))
+    ]
+    areas.sort(reverse=True)
+    for area, (i, j) in areas:
+        for pi, pj in perimeter:
+            if pi[0] < j[0] and pi[1] < j[1] and pj[0] > i[0] and pj[1] > i[1]:
+                break
+        else:
+            return area
+
+
+def old_part_2(data):
     traces = list(pairwise(data + [data[0]]))
     out = 0
     for (ix, iy), (jx, jy) in combinations(data, 2):
